@@ -1,3 +1,12 @@
+---
+title: DB Repair Environment
+emoji: "\u26A0\uFE0F"
+colorFrom: gray
+colorTo: blue
+sdk: docker
+app_port: 8000
+---
+
 # Database Repair Environment (DB Heist)
 
 A dynamic, stateful OpenEnv environment where an AI acts as an Autonomous Database Administrator (DBA). The agent is given access to a "breached" or "corrupted" SQLite database and must run live SQL queries to explore schemas, identify anomalies, and execute `UPDATE` or `DELETE` statements to neutralize threats and restore data integrity.
