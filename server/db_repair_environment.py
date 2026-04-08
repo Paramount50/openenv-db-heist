@@ -20,7 +20,7 @@ from server.models import DBRepairServerObservation
 # ─── Task Data ────────────────────────────────────────────────────────────────
 
 def init_db_easy() -> Tuple[sqlite3.Connection, str]:
-    db = sqlite3.connect(":memory:")
+    db = sqlite3.connect(":memory:", check_same_thread=False)
     db.row_factory = sqlite3.Row
     db.executescript("""
         CREATE TABLE server_logs (
@@ -50,7 +50,7 @@ def check_db_easy(db: sqlite3.Connection) -> float:
 
 
 def init_db_medium() -> Tuple[sqlite3.Connection, str]:
-    db = sqlite3.connect(":memory:")
+    db = sqlite3.connect(":memory:", check_same_thread=False)
     db.row_factory = sqlite3.Row
     db.executescript("""
         CREATE TABLE users (
@@ -96,7 +96,7 @@ def check_db_medium(db: sqlite3.Connection) -> float:
 
 
 def init_db_hard() -> Tuple[sqlite3.Connection, str]:
-    db = sqlite3.connect(":memory:")
+    db = sqlite3.connect(":memory:", check_same_thread=False)
     db.row_factory = sqlite3.Row
     db.executescript("""
         CREATE TABLE accounts (
