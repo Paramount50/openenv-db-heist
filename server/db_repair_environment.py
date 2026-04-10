@@ -45,8 +45,8 @@ def check_db_easy(db: sqlite3.Connection) -> float:
     cur = db.execute("SELECT COUNT(*) as c FROM server_logs WHERE message LIKE '%pk_live_%'")
     leaks = cur.fetchone()['c']
     if leaks == 0 and count == 4:
-        return 1.0
-    return 0.0
+        return 0.99
+    return 0.01
 
 
 def init_db_medium() -> Tuple[sqlite3.Connection, str]:
@@ -91,8 +91,13 @@ def check_db_medium(db: sqlite3.Connection) -> float:
         elif uid == 3 and bal == 150:
             scores += 0.25
             
-    # Max score 1.0
-    return min(1.0, scores / 0.75) if scores > 0 else 0.0
+    # Max score 0.99, strictly within (0, 1)
+    raw_score = (scores / 0.75) if scores > 0 else 0.0
+    if raw_score >= 1.0:
+        return 0.99
+    elif raw_score <= 0.0:
+        return 0.01
+    return raw_score
 
 
 def init_db_hard() -> Tuple[sqlite3.Connection, str]:
@@ -139,8 +144,8 @@ def check_db_hard(db: sqlite3.Connection) -> float:
     mapping = {r['user_id']: r['status'] for r in rows}
     
     if mapping.get(102) == 'banned' and mapping.get(101) == 'active' and mapping.get(103) == 'active':
-        return 1.0
-    return 0.0
+        return 0.99
+    return 0.01
 
 
 class DBRepairEnvironment(Environment):
@@ -249,9 +254,9 @@ class DBRepairEnvironment(Environment):
                 
             self._done = True
             
-            if score == 1.0:
+            if score >= 0.99:
                 self._last_feedback = "SUCCESS! Database repairs are perfectly applied."
-            elif score > 0:
+            elif score > 0.01:
                 self._last_feedback = f"PARTIAL SUCCESS. Score: {score}. Database is slightly cleaner but not perfect."
             else:
                 self._last_feedback = "FAILED. The final database state does not match the expected repaired state."

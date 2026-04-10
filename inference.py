@@ -177,8 +177,8 @@ async def run_task(client: OpenAI, env: DBRepairEnv, task_name: str) -> float:
                 break
 
         score = sum(rewards)
-        score = min(max(score, 0.0), 1.0)
-        success = score >= 1.0
+        score = min(max(score, 0.01), 0.99)
+        success = score >= 0.99
 
     finally:
         log_end(success=success, steps=steps_taken, score=score, rewards=rewards)
